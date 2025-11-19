@@ -1,6 +1,6 @@
 const passport = require('passport');
 const DiscordStrategy = require('passport-discord').Strategy;
-const User = require('../models/User'); // Caminho correto para a pasta 'models'
+const User = require('../models/User');
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
@@ -19,20 +19,24 @@ passport.use(new DiscordStrategy({
     try {
         let user = await User.findOne({ discordId: profile.id });
         if (user) {
-            return done(null, user);
+            // Se o usuário já existe, apenas o retorna
+            done(null, user);
         } else {
+            // Se for o primeiro login, cria um novo usuário
+            // LÓGICA DE OWNER: O primeiro usuário a se cadastrar se torna o "owner"
             const isFirstUser = (await User.countDocuments()) === 0;
             const newUser = new User({
                 discordId: profile.id,
                 username: profile.username,
+                discriminator: profile.discriminator,
                 avatar: profile.avatar,
-                role: isFirstUser ? 'owner' : 'admin'
+                role: isFirstUser ? 'owner' : 'admin' // O primeiro usuário é o dono
             });
             await newUser.save();
-            return done(null, newUser);
+            done(null, newUser);
         }
     } catch (err) {
         console.error(err);
-        return done(err, null);
+        done(err, null);
     }
 }));
