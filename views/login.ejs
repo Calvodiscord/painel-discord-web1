@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Painel</title>
+</head>
+<body>
+    <h1>Bem-vindo ao Painel de Controle</h1>
+    <% if (user) { %>
+        <p>Olá, <%= user.username %>!</p>
+        <a href="/dashboard">Ir para o Dashboard</a>
+        <a href="/auth/logout">Sair</a>
+    <% } else { %>
+        <p>Por favor, faça login para continuar.</p>
+        <a href="/auth/discord">Entrar com Discord</a>
+    <% } %>
+</body>
+</html>
