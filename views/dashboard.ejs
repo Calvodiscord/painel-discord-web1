@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Painel</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <p>Logado como: <strong><%= user.username %></strong></p>
+        
+        <% if (stats && !stats.error) { %>
+            <ul class="stats-list">
+                <li>Servidores: <span><%= stats.guilds %></span></li>
+                <li>Usuários: <span><%= stats.users %></span></li>
+                <li>Canais: <span><%= stats.channels %></span></li>
+            </ul>
+        <% } else { %>
+            <p>Não foi possível carregar as estatísticas do bot. Verifique se ele está online.</p>
+        <% } %>
+
+        <br>
+        <a href="/auth/logout" class="logout-btn">Sair</a>
+    </div>
+</body>
+</html>
