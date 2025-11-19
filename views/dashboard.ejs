@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Painel</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <p>Logado como: <strong><%= user.username %></strong></p>
+        
+        <!-- O container das estatísticas começa com uma mensagem de "Carregando..." -->
+        <div id="stats-container">
+            <h2>Estatísticas do Bot</h2>
+            <p>Carregando estatísticas...</p>
+        </div>
+
+        <br>
+        <a href="/auth/logout" class="logout-btn">Sair</a>
+    </div>
+
+    <script>
+        // Roda o script depois que a página carregou completamente
+        document.addEventListener('DOMContentLoaded', () => {
+            const statsContainer = document.getElementById('stats-container');
+
+            // Faz a chamada para a nossa nova API de estatísticas
+            fetch('/api/stats')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('A resposta da rede não foi ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && !data.error) {
+                        statsContainer.innerHTML = `
+                            <h2>Estatísticas do Bot</h2>
+                            <ul class="stats-list">
+                                <li>Servidores: <span>${data.guilds}</span></li>
+                                <li>Usuários: <span>${data.users}</span></li>
+                                <li>Canais: <span>${data.channels}</span></li>
+                            </ul>
+                        `;
+                    } else {
+                        statsContainer.innerHTML = '<h2>Estatísticas do Bot</h2><p>Não foi possível carregar as estatísticas do bot.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar stats:', error);
+                    statsContainer.innerHTML = '<h2>Estatísticas do Bot</h2><p>Erro de comunicação ao buscar estatísticas.</p>';
+                });
+        });
+    </script>
+</body>
+</html>
