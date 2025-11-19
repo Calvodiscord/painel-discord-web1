@@ -37,7 +37,8 @@ const isLoggedIn = (req, res, next) => {
 
 // Rotas
 app.get('/', (req, res) => res.render('login', { user: req.user }));
-app.use('/auth', require('./routes/auth')); // Caminho correto para a pasta 'routes'
-app.use('/dashboard', isLoggedIn, require('./routes/dashboard')); // Caminho correto
+app.use('/auth', require('./routes/auth'));
+app.use('/dashboard', isLoggedIn, require('./routes/dashboard'));
+app.use('/api', isLoggedIn, require('./routes/api')); // <-- ADICIONE ESTA LINHA
 
 app.listen(PORT, () => console.log(`[PAINEL] Servidor rodando na porta ${PORT}`));
